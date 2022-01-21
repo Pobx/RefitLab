@@ -1,0 +1,5 @@
+{
+  "csharpfixformat.style.braces.onSameLine": false,
+  "csharpfixformat.style.newline.atEnd": true,
+  "csharpfixformat.sort.usings.order": ""
+}
