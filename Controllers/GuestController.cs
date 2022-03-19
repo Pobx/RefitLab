@@ -84,7 +84,7 @@ namespace RefitLab.Controllers
       };
 
       var tokenClient = new TokenClient (httpClient, options);
-      var tokenResponse = await tokenClient.RequestPasswordTokenAsync ("pobx", "1234", "level1");
+      var tokenResponse = await tokenClient.RequestPasswordTokenAsync ("pobx", "1234", "level1 offline_access");
 
       if (tokenResponse.IsError)
       {
