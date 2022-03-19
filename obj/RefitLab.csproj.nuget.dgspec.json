@@ -1,30 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\PF1MBT9J\\Desktop\\RefitLab\\RefitLab.csproj": {}
+    "/home/pobx/RefitLab/RefitLab.csproj": {}
   },
   "projects": {
-    "C:\\Users\\PF1MBT9J\\Desktop\\RefitLab\\RefitLab.csproj": {
+    "/home/pobx/RefitLab/RefitLab.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\PF1MBT9J\\Desktop\\RefitLab\\RefitLab.csproj",
+        "projectUniqueName": "/home/pobx/RefitLab/RefitLab.csproj",
         "projectName": "RefitLab",
-        "projectPath": "C:\\Users\\PF1MBT9J\\Desktop\\RefitLab\\RefitLab.csproj",
-        "packagesPath": "C:\\Users\\PF1MBT9J\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\PF1MBT9J\\Desktop\\RefitLab\\obj\\",
+        "projectPath": "/home/pobx/RefitLab/RefitLab.csproj",
+        "packagesPath": "/home/pobx/.nuget/packages/",
+        "outputPath": "/home/pobx/RefitLab/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\PF1MBT9J\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/home/pobx/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -43,6 +38,10 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "dependencies": {
+            "IdentityModel": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
             "Refit": {
               "target": "Package",
               "version": "[6.1.15, )"
@@ -74,7 +73,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.402\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/opt/dotnet-sdk-5.0.404-linux-x64/sdk/5.0.404/RuntimeIdentifierGraph.json"
         }
       }
     }
