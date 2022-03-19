@@ -1,9 +1,13 @@
+using IdentityModel;
 using IdentityModel.Client;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Refit;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using static IdentityModel.OidcConstants;
 
@@ -94,6 +98,42 @@ namespace RefitLab.Controllers
 
       Console.WriteLine (tokenResponse.Json);
       Console.WriteLine ("\n\n");
+
+        var claims = new List<Claim>
+            {
+                new Claim(JwtClaimTypes.Name,"Company"),
+                new Claim(JwtClaimTypes.Role, "Administrator"),
+                new Claim(JwtClaimTypes.Subject, "Company")
+            };
+
+        var claimsIdentity = new ClaimsIdentity(User.Claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+        var authProperties = new AuthenticationProperties
+        {
+            AllowRefresh = true,
+            // Refreshing the authentication session should be allowed.
+
+            // ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(1),
+            // The time at which the authentication ticket expires. A 
+            // value set here overrides the ExpireTimeSpan option of 
+            // CookieAuthenticationOptions set with AddCookie.
+
+            IsPersistent = false,
+            // Whether the authentication session is persisted across 
+            // multiple requests. When used with cookies, controls
+            // whether the cookie's lifetime is absolute (matching the
+            // lifetime of the authentication ticket) or session-based.
+
+            IssuedUtc = DateTime.Now,
+            // The time at which the authentication ticket was issued.
+
+            // RedirectUri = "https://localhost:4001/signin-oidc"
+            // The full path or absolute URI to be used as an http 
+            // redirect response value.
+        };
+
+       await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme + "-CreatedByPobx", new ClaimsPrincipal(claimsIdentity), authProperties);
+      //  await HttpContext.SignInAsync(IdentityServerConstants.DefaultCookieAuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
 
       return Ok (tokenResponse.Json);
     }
