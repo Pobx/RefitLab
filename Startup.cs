@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -49,6 +50,13 @@ namespace RefitLab
       // {
       //   ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; }
       // });
+
+      services.AddAuthentication ()
+        .AddCookie (CookieAuthenticationDefaults.AuthenticationScheme + "-CreatedByPobx", options =>
+        {
+          options.ExpireTimeSpan = TimeSpan.FromMinutes (5);
+          options.SlidingExpiration = true;
+        });
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
