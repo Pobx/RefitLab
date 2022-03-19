@@ -61,13 +61,43 @@ namespace RefitLab.Controllers
       var httpClient = new HttpClient (clientCertificateHandler);
       httpClient.BaseAddress = new Uri ("https://localhost:6001");
 
-      var token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IkQwQzQ0ODA3MTlENjFDQTU5NDkwRUYwQ0VCRkJFNkFGIiwidHlwIjoiYXQrand0In0.eyJuYmYiOjE2NDc1OTIwODQsImV4cCI6MTY0NzU5NTY4NCwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEvcmVzb3VyY2VzIiwiY2xpZW50X2lkIjoicG9ieCIsImp0aSI6IjgwQTA5OUExNEQ0QjQwQTNCQkJGNTgyNkNCOUQyQUZEIiwiaWF0IjoxNjQ3NTkyMDg0LCJzY29wZSI6WyJhcGkxIl19.MqVgAaqJeliGPXq8nf4JJkuBKZmyVowRDRVFgFw1mGag1keJXjJf7TBZGUX0w-_yzGl6Jim9IEkv6Xt-iSiaxyuk_ihQppQD1MVdKsXfp7B7IV2TJjnRTTq5oy9KjPUi_pA4UXnmOxFhCiAvW8XE0Ut43SmeG-rb7SLbCNg5kOZKYihhvbRzi-M4lQTENkWw8pEbbSHzemYSQl2Y1dCF777gxGbV2xl9RWwxeCyNj1LvvohggIw9F6BpzEBlxGRpJj-ByUZoEC6r0MySfS6BmdGsOs2eXnbTLZT3tmDUwZF5mpM8WundCCv7W5J6URFGk8A05OxJ-nv2uvTZ2oDFBA";
+      var token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IkQwQzQ0ODA3MTlENjFDQTU5NDkwRUYwQ0VCRkJFNkFGIiwidHlwIjoiYXQrand0In0.eyJuYmYiOjE2NDc2ODEwMzksImV4cCI6MTY0NzY4NDYzOSwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEvcmVzb3VyY2VzIiwiY2xpZW50X2lkIjoicm8uY2xpZW50Iiwic3ViIjoiMSIsImF1dGhfdGltZSI6MTY0NzY4MTAzOSwiaWRwIjoibG9jYWwiLCJqdGkiOiI2RUYzQUU1ODBGMzI3Q0VBMTk0QjU3QTZDNUMxNjY3NSIsImlhdCI6MTY0NzY4MTAzOSwic2NvcGUiOlsibGV2ZWwxIl0sImFtciI6WyJwd2QiXX0.yFi7qB2kmG6QPKIfSRfvit_r3BpKJyCu1mq_0oJNPumorHBQzqiLocfLCkTINThYlOLaPCZm0zXMZZ5judMK3sxDlx5JSRbrXTnqwGItPPSON3cmzAcibPxwvVr4x_-4adAlPZYdF5_UL6yXdoV7zPxuekajhTl5S8UBK_HQnDtcn0excsgbLkAy_dUDXHyBLJlUJ_K6FSslT6dL2m_Q6GsWLAJjMSEmD3pFE6onWGb5B_C83m0jKBz0vosfh-hSVUGK5Ne2GQCNNS92a5lBoAm80hh-V4UR11vcTuhCh81VQSLQF4ISMyt-2rQvIDoDsndIa08X_PMTFnRE7f6zNQ";
       var api = RestService.For<IpobxApi2> (httpClient);
       var response = await api.identity (token);
       Console.WriteLine (response);
 
       return Ok (response);
+    }
 
+    [HttpGet ("token-by-password")]
+    public async Task<ActionResult> tokenByPassword ()
+    {
+      var clientCertificateHandler = new HttpClientHandler ();
+      clientCertificateHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+      var httpClient = new HttpClient (clientCertificateHandler);
+
+      var options = new TokenClientOptions
+      {
+        Address = "https://localhost:5001/connect/token",
+        ClientId = "ro.client",
+        ClientSecret = "secret1234",
+      };
+
+      var tokenClient = new TokenClient (httpClient, options);
+      var tokenResponse = await tokenClient.RequestPasswordTokenAsync ("pobx", "1234", "level1");
+
+      if (tokenResponse.IsError)
+      {
+        Console.WriteLine (tokenResponse.Error);
+        return NoContent ();
+      }
+
+      Console.WriteLine (tokenResponse.Json);
+      Console.WriteLine ("\n\n");
+
+      // var tokenClient = new TokenClient("https://localhost:5001/connect/token", "ro.client", "secret1234");
+      // var tokenResponse = await tokenClient.RequestResourceOwnerPasswordAsync("alice", "password", "api1");
+      return Ok (tokenResponse.Json);
     }
   }
 
