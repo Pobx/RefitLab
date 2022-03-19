@@ -95,8 +95,6 @@ namespace RefitLab.Controllers
       Console.WriteLine (tokenResponse.Json);
       Console.WriteLine ("\n\n");
 
-      // var tokenClient = new TokenClient("https://localhost:5001/connect/token", "ro.client", "secret1234");
-      // var tokenResponse = await tokenClient.RequestResourceOwnerPasswordAsync("alice", "password", "api1");
       return Ok (tokenResponse.Json);
     }
   }
