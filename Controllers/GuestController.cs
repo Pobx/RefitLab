@@ -80,7 +80,7 @@ namespace RefitLab.Controllers
       var httpClient = new HttpClient (clientCertificateHandler);
       httpClient.BaseAddress = new Uri ("https://localhost:6001");
 
-      var token = "7E4A812CBB20D97A9684B68258F0D27EE5E587EAEDCD1F1E87DD6E1A78C38921";
+      var token = "8243958D653502A520D08DCCA9BB38AF66C3475FDD7B4FFFFA6F92980F3039CC";
       var api = RestService.For<IpobxApi2> (httpClient);
       var response = await api.identity (token);
       Console.WriteLine (response);
@@ -132,7 +132,7 @@ namespace RefitLab.Controllers
       };
 
       var tokenClient = new TokenClient (httpClient, options);
-      var tokenResponse = await tokenClient.RequestPasswordTokenAsync ("pobx", "1234", "level1 offline_access");
+      var tokenResponse = await tokenClient.RequestPasswordTokenAsync ("pobx", "1234", "level1 openid profile offline_access");
 
       if (tokenResponse.IsError)
       {
@@ -146,30 +146,59 @@ namespace RefitLab.Controllers
       return Ok (tokenResponse.Json);
     }
 
+    [HttpGet ("userinfo")]
+    public async Task<ActionResult> userInfo ()
+    {
+      var clientCertificateHandler = new HttpClientHandler ();
+      clientCertificateHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+      var httpClient = new HttpClient (clientCertificateHandler);
+      httpClient.BaseAddress = new Uri ("https://localhost:5001");
+
+      var token = "8243958D653502A520D08DCCA9BB38AF66C3475FDD7B4FFFFA6F92980F3039CC";
+      var response = await httpClient.GetUserInfoAsync (new UserInfoRequest
+      {
+        Address = "/connect/userinfo",
+          Token = token
+      });
+
+      if (response.IsError)
+      {
+        Console.WriteLine (response.Error);
+        return NoContent ();
+      }
+
+      Console.WriteLine (response.Json);
+      Console.WriteLine ("\n\n");
+
+      return Ok (response.Json);
+    }
+
     [HttpGet ("Revocation")]
     public async Task<object> Revocation ()
     {
-      // var entity = new ClientCredentialsTokenRequest
-      // {
-      //   ClientId = "pobx",
-      //   ClientSecret = "secret1234",
-      //   Scope = "api1"
-      // };
+      var clientCertificateHandler = new HttpClientHandler ();
+      clientCertificateHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+      var client = new HttpClient (clientCertificateHandler);
+      client.BaseAddress = new Uri ("https://localhost:5001");
+      var response = await client.RevokeTokenAsync (new TokenRevocationRequest
+      {
+        Address = "/connect/revocation",
+          ClientId = "ro.client.token",
+          ClientSecret = "secret1234",
 
-      var data = new Dictionary<string, object>
-        { { IdentityModel.OidcConstants.TokenRequest.ClientId, "pobx" },
-          { IdentityModel.OidcConstants.TokenRequest.ClientSecret, "secret1234" },
-          { IdentityModel.OidcConstants.TokenRequest.Scope, "api1" },
-          { IdentityModel.OidcConstants.TokenRequest.GrantType, GrantTypes.ClientCredentials },
-        };
+          Token = "8243958D653502A520D08DCCA9BB38AF66C3475FDD7B4FFFFA6F92980F3039CC"
+      });
 
-      var response = await _ipobxApi.getToken (data);
-      Console.WriteLine (response);
+      if (response.IsError)
+      {
+        Console.WriteLine (response.Error);
+        return NoContent ();
+      }
 
-      return Ok (response);
+      Console.WriteLine (response.Raw);
+      return Ok (response.Raw);
     }
 
-    // secret1234
   }
 
   public interface IpobxApi
