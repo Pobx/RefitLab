@@ -56,16 +56,15 @@ namespace RefitLab.Controllers
       return Ok (response);
     }
 
-    [HttpGet ("identity")]
-    public async Task<ActionResult<object>> identity ()
+    [HttpGet ("identityJwt")]
+    public async Task<ActionResult<object>> identityJwt ()
     {
-      // var httpClient = new CreateHttpClient("https://localhost:6001");
       var clientCertificateHandler = new HttpClientHandler ();
       clientCertificateHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
       var httpClient = new HttpClient (clientCertificateHandler);
       httpClient.BaseAddress = new Uri ("https://localhost:6001");
 
-      var token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IkQwQzQ0ODA3MTlENjFDQTU5NDkwRUYwQ0VCRkJFNkFGIiwidHlwIjoiYXQrand0In0.eyJuYmYiOjE2NDc2ODEwMzksImV4cCI6MTY0NzY4NDYzOSwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEvcmVzb3VyY2VzIiwiY2xpZW50X2lkIjoicm8uY2xpZW50Iiwic3ViIjoiMSIsImF1dGhfdGltZSI6MTY0NzY4MTAzOSwiaWRwIjoibG9jYWwiLCJqdGkiOiI2RUYzQUU1ODBGMzI3Q0VBMTk0QjU3QTZDNUMxNjY3NSIsImlhdCI6MTY0NzY4MTAzOSwic2NvcGUiOlsibGV2ZWwxIl0sImFtciI6WyJwd2QiXX0.yFi7qB2kmG6QPKIfSRfvit_r3BpKJyCu1mq_0oJNPumorHBQzqiLocfLCkTINThYlOLaPCZm0zXMZZ5judMK3sxDlx5JSRbrXTnqwGItPPSON3cmzAcibPxwvVr4x_-4adAlPZYdF5_UL6yXdoV7zPxuekajhTl5S8UBK_HQnDtcn0excsgbLkAy_dUDXHyBLJlUJ_K6FSslT6dL2m_Q6GsWLAJjMSEmD3pFE6onWGb5B_C83m0jKBz0vosfh-hSVUGK5Ne2GQCNNS92a5lBoAm80hh-V4UR11vcTuhCh81VQSLQF4ISMyt-2rQvIDoDsndIa08X_PMTFnRE7f6zNQ";
+      var token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IkQwQzQ0ODA3MTlENjFDQTU5NDkwRUYwQ0VCRkJFNkFGIiwidHlwIjoiYXQrand0In0.eyJuYmYiOjE2NDc5MzY0NTQsImV4cCI6MTY0NzkzNjc1NCwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSIsImF1ZCI6WyJyby5jbGllbnQudG9rZW4iLCJodHRwczovL2xvY2FsaG9zdDo1MDAxL3Jlc291cmNlcyJdLCJjbGllbnRfaWQiOiJyby5jbGllbnQuand0Iiwic3ViIjoiMSIsImF1dGhfdGltZSI6MTY0NzkzNjQ1NCwiaWRwIjoibG9jYWwiLCJqdGkiOiJENjEwMzBCMDUxNjNBQjI5ODRFMUIyQTBCQTg5OTMwNyIsImlhdCI6MTY0NzkzNjQ1NCwic2NvcGUiOlsibGV2ZWwxIiwib2ZmbGluZV9hY2Nlc3MiXSwiYW1yIjpbInB3ZCJdfQ.QQZVHJhf3uO6dkp2vorgcgkJogyEFMyC-aBzbvenCG0BO6EAqf1XOCuFMFKICGIU3qO8RCLBUpCuwtNoWqHuk3cl41XZu4zCXLAZ_5zeCmhgPIS9Z2Kji0B7qTHRpH6TNAZbKJez2hEbJhvmV_RKpbXtoVD802bFisIygQ8Rn35L_EefO663hmYSUT6joFX-r6IlYCmUPW5k6UcdArltiBfm8IYCJ87iNxQpIgulDDm0jYkCnD_mMjrPWGBo6rpkjIaDxxQvYb_oZe8eE7aMYizDzdciqZxPwIHg4gAY-3fCp9sgaZ9EARd_t7tVgUV0JRqWaIXzts-rbSelDJzFJQ";
       var api = RestService.For<IpobxApi2> (httpClient);
       var response = await api.identity (token);
       Console.WriteLine (response);
@@ -73,8 +72,24 @@ namespace RefitLab.Controllers
       return Ok (response);
     }
 
-    [HttpGet ("token-by-password")]
-    public async Task<ActionResult> tokenByPassword ()
+    [HttpGet ("identityToken")]
+    public async Task<ActionResult<object>> identityToken ()
+    {
+      var clientCertificateHandler = new HttpClientHandler ();
+      clientCertificateHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+      var httpClient = new HttpClient (clientCertificateHandler);
+      httpClient.BaseAddress = new Uri ("https://localhost:6001");
+
+      var token = "7E4A812CBB20D97A9684B68258F0D27EE5E587EAEDCD1F1E87DD6E1A78C38921";
+      var api = RestService.For<IpobxApi2> (httpClient);
+      var response = await api.identity (token);
+      Console.WriteLine (response);
+
+      return Ok (response);
+    }
+
+    [HttpGet ("token-by-password-jwt")]
+    public async Task<ActionResult> tokenByPasswordJwt ()
     {
       var clientCertificateHandler = new HttpClientHandler ();
       clientCertificateHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
@@ -83,7 +98,7 @@ namespace RefitLab.Controllers
       var options = new TokenClientOptions
       {
         Address = "https://localhost:5001/connect/token",
-        ClientId = "ro.client",
+        ClientId = "ro.client.jwt",
         ClientSecret = "secret1234",
       };
 
@@ -99,44 +114,62 @@ namespace RefitLab.Controllers
       Console.WriteLine (tokenResponse.Json);
       Console.WriteLine ("\n\n");
 
-      //   var claims = new List<Claim>
-      //       {
-      //           new Claim(JwtClaimTypes.Name,"Company"),
-      //           new Claim(JwtClaimTypes.Role, "Administrator"),
-      //           new Claim(JwtClaimTypes.Subject, "Company")
-      //       };
+      return Ok (tokenResponse.Json);
+    }
 
-      //   var claimsIdentity = new ClaimsIdentity(User.Claims, CookieAuthenticationDefaults.AuthenticationScheme);
+    [HttpGet ("token-by-password-token")]
+    public async Task<ActionResult> tokenByPasswordToken ()
+    {
+      var clientCertificateHandler = new HttpClientHandler ();
+      clientCertificateHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+      var httpClient = new HttpClient (clientCertificateHandler);
 
-      //   var authProperties = new AuthenticationProperties
-      //   {
-      //       AllowRefresh = true,
-      //       // Refreshing the authentication session should be allowed.
+      var options = new TokenClientOptions
+      {
+        Address = "https://localhost:5001/connect/token",
+        ClientId = "ro.client.token",
+        ClientSecret = "secret1234",
+      };
 
-      //       // ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(1),
-      //       // The time at which the authentication ticket expires. A 
-      //       // value set here overrides the ExpireTimeSpan option of 
-      //       // CookieAuthenticationOptions set with AddCookie.
+      var tokenClient = new TokenClient (httpClient, options);
+      var tokenResponse = await tokenClient.RequestPasswordTokenAsync ("pobx", "1234", "level1 offline_access");
 
-      //       IsPersistent = false,
-      //       // Whether the authentication session is persisted across 
-      //       // multiple requests. When used with cookies, controls
-      //       // whether the cookie's lifetime is absolute (matching the
-      //       // lifetime of the authentication ticket) or session-based.
+      if (tokenResponse.IsError)
+      {
+        Console.WriteLine (tokenResponse.Error);
+        return NoContent ();
+      }
 
-      //       IssuedUtc = DateTime.Now,
-      //       // The time at which the authentication ticket was issued.
-
-      //       // RedirectUri = "https://localhost:4001/signin-oidc"
-      //       // The full path or absolute URI to be used as an http 
-      //       // redirect response value.
-      //   };
-
-      //  await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme + "-CreatedByPobx", new ClaimsPrincipal(claimsIdentity), authProperties);
-      //  await HttpContext.SignInAsync(IdentityServerConstants.DefaultCookieAuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+      Console.WriteLine (tokenResponse.Json);
+      Console.WriteLine ("\n\n");
 
       return Ok (tokenResponse.Json);
     }
+
+    [HttpGet ("Revocation")]
+    public async Task<object> Revocation ()
+    {
+      // var entity = new ClientCredentialsTokenRequest
+      // {
+      //   ClientId = "pobx",
+      //   ClientSecret = "secret1234",
+      //   Scope = "api1"
+      // };
+
+      var data = new Dictionary<string, object>
+        { { IdentityModel.OidcConstants.TokenRequest.ClientId, "pobx" },
+          { IdentityModel.OidcConstants.TokenRequest.ClientSecret, "secret1234" },
+          { IdentityModel.OidcConstants.TokenRequest.Scope, "api1" },
+          { IdentityModel.OidcConstants.TokenRequest.GrantType, GrantTypes.ClientCredentials },
+        };
+
+      var response = await _ipobxApi.getToken (data);
+      Console.WriteLine (response);
+
+      return Ok (response);
+    }
+
+    // secret1234
   }
 
   public interface IpobxApi
@@ -153,6 +186,9 @@ namespace RefitLab.Controllers
   {
     [Get ("/identity")]
     Task<object> identity ([Authorize ("Bearer")] string token);
+
+    [Get ("/identity2")]
+    Task<object> identity2 ([Authorize ("introspection")] string token);
   }
 
   public record PostEntity (int userId, int id, string title, string body);
