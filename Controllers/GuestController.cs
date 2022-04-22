@@ -199,10 +199,21 @@ namespace RefitLab.Controllers
       return Ok (response.Raw);
     }
 
+    [HttpGet ("weather")]
+    public async Task<object> weather ()
+    {
+      var response = await _ipobxApi.weather ();
+      Console.WriteLine (response);
+
+      return Ok (response);
+    }
+
   }
 
   public interface IpobxApi
   {
+    [Get ("/api/WeatherForecast/all")]
+    Task<object> weather ();
 
     [Post ("/connect/token")]
     Task<object> getToken ([Body (BodySerializationMethod.UrlEncoded)] Dictionary<string, object> data);
