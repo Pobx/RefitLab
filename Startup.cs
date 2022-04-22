@@ -46,7 +46,7 @@ namespace RefitLab
       string Certificate = "ssl/dev.cer";
 
       // Load the certificate into an X509Certificate object.
-      X509Certificate cert = new X509Certificate (Certificate);
+      var cert = new X509Certificate2 (X509Certificate.CreateFromCertFile (Certificate));
 
       // Get the value.
       string resultsTrue = cert.ToString (true);
