@@ -293,15 +293,15 @@ namespace RefitLab.Controllers
     Task<object> WeatherForecast ();
 
     [Headers ("customerId: @RMU9EF0399D7D8E4C", "Accept-Language: en-US", "x-api-key: d0109ab7-fe3a-4b2f-bddb-4c87e4749d2f", "sourceSystem: 1234")]
-    [Get ("/v1/favorites/me/transfer")]
+    [Get ("/favorites/me/transfer")]
     Task<object> FavoriteTransfer ();
 
     [Headers ("customerId: @RMU9EF0399D7D8E4C", "Accept-Language: en-US", "x-api-key: d0109ab7-fe3a-4b2f-bddb-4c87e4749d2f", "sourceSystem: 1234")]
-    [Get ("/v1/favorites/me/biller/billpay")]
+    [Get ("/favorites/me/biller/billpay")]
     Task<object> BillPay ();
 
     [Headers ("customerId: @RMU9EF0399D7D8E4C", "Accept-Language: en-US", "x-api-key: d0109ab7-fe3a-4b2f-bddb-4c87e4749d2f", "sourceSystem: 1234")]
-    [Get ("/v1/favorites/me/biller/topup")]
+    [Get ("/favorites/me/biller/topup")]
     Task<object> Topup ();
 
   }
