@@ -71,7 +71,7 @@ namespace RefitLab
             // services.AddRefitClient<IpobxApi> ().ConfigureHttpClient (c => c.BaseAddress = new Uri ("https://localhost:5002"))
             //   .ConfigurePrimaryHttpMessageHandler (_ => clientCertificateHandler);
 
-            services.AddRefitClient<IpobxApi>().ConfigureHttpClient(c => c.BaseAddress = new Uri("https://localhost:7090"))
+            services.AddRefitClient<IpobxApi>().ConfigureHttpClient(c => c.BaseAddress = new Uri("https://localhost:3400"))
             .ConfigurePrimaryHttpMessageHandler(_ => new HttpClientHandler
             {
                 ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) =>
