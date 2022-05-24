@@ -266,16 +266,12 @@ namespace RefitLab.Controllers
     [HttpGet ("test-3-routes-favorites")]
     public async Task<object> Test3RoutesFavorites ()
     {
-      // var response = await _ipobxApi.weather ();
-      // Console.WriteLine (response);
-
       var tasks = new List<Task<object>> ();
 
       tasks.Add (_ipobxApi.FavoriteTransfer ());
-      // tasks.Add (_ipobxApi.BillPay ());
-      // tasks.Add (_ipobxApi.Topup ());
+      tasks.Add (_ipobxApi.BillPay ());
+      tasks.Add (_ipobxApi.Topup ());
       var response = (await Task.WhenAll (tasks));
-      // .SelectMany (res => res);
 
       return Ok (response);
     }
@@ -296,14 +292,16 @@ namespace RefitLab.Controllers
     [Get ("/WeatherForecast")]
     Task<object> WeatherForecast ();
 
-    [Headers ("customerId: @RMU9EF0399D7D8E4C", "Accept-Language: en-US", "x-api-key: d0109ab7-fe3a-4b2f-bddb-4c87e4749d2f")]
-    [Get ("/favorites/me/transfer")]
+    [Headers ("customerId: @RMU9EF0399D7D8E4C", "Accept-Language: en-US", "x-api-key: d0109ab7-fe3a-4b2f-bddb-4c87e4749d2f", "sourceSystem: 1234")]
+    [Get ("/v1/favorites/me/transfer")]
     Task<object> FavoriteTransfer ();
 
-    [Get ("/favorites/me/biller/billpay")]
+    [Headers ("customerId: @RMU9EF0399D7D8E4C", "Accept-Language: en-US", "x-api-key: d0109ab7-fe3a-4b2f-bddb-4c87e4749d2f", "sourceSystem: 1234")]
+    [Get ("/v1/favorites/me/biller/billpay")]
     Task<object> BillPay ();
 
-    [Get ("/favorites/me/biller/topup")]
+    [Headers ("customerId: @RMU9EF0399D7D8E4C", "Accept-Language: en-US", "x-api-key: d0109ab7-fe3a-4b2f-bddb-4c87e4749d2f", "sourceSystem: 1234")]
+    [Get ("/v1/favorites/me/biller/topup")]
     Task<object> Topup ();
 
   }
