@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -38,6 +38,7 @@ namespace RefitLab
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RefitLab", Version = "v1" });
             });
+            services.AddHttpContextAccessor();
 
             // Console.WriteLine(Path.Combine (Directory.GetCurrentDirectory(), "ssl/https.pfx"));
             // Console.WriteLine(Directory.GetCurrentDirectory());
@@ -83,6 +84,17 @@ namespace RefitLab
                     return true;
                 }
             });
+
+            services.AddRefitClient<IDemoNoCookie>().ConfigureHttpClient(option =>
+            {
+                option.BaseAddress = new Uri("https://localhost:5001");
+            })
+            .ConfigurePrimaryHttpMessageHandler(_ => new HttpClientHandler
+            {
+              UseCookies = false
+            });
+
+
 
             // services.AddAuthentication ()
             //   .AddCookie (CookieAuthenticationDefaults.AuthenticationScheme + "-CreatedByPobx", options =>

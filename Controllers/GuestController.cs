@@ -1,8 +1,10 @@
-using IdentityModel;
+﻿using IdentityModel;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using Refit;
 using System;
@@ -22,9 +24,81 @@ namespace RefitLab.Controllers
     public class GuestController : ControllerBase
     {
         private readonly IpobxApi _ipobxApi;
-        public GuestController(IpobxApi ipobxApi)
+        private readonly IDemoNoCookie _demoNoCookie;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        //static readonly HttpClient client = new HttpClient();
+        public GuestController(IpobxApi ipobxApi, IDemoNoCookie demoNoCookie, IHttpContextAccessor httpContextAccessor)
         {
             _ipobxApi = ipobxApi;
+            _demoNoCookie = demoNoCookie;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        [HttpGet("cookies")]
+        public async Task<string> cookies()
+        {
+            var client = new HttpClient();
+            HttpResponseMessage response = await client.GetAsync("https://localhost:5001/weatherforecast");
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync();
+
+            var headers = response.Headers;
+
+            Console.WriteLine($"========================================================");
+
+            foreach (var header in headers)
+            {
+                Console.WriteLine($"Key: {header.Key}");
+                if (header.Key == "Set-Cookie")
+                {
+                    foreach (var value in header.Value)
+                    {
+                        Console.WriteLine($"Value {value}");
+                    }
+                }
+            }
+
+
+            Console.WriteLine($"========================================================");
+            return responseBody;
+        }
+
+        [HttpGet("cookies2")]
+        public async Task<string> cookies2()
+        {
+            //var cookies = _httpContextAccessor.HttpContext.Request.Cookies;
+
+            //Console.WriteLine($"========================================================");
+
+            //foreach (var cookie in cookies)
+            //{
+            //    Console.WriteLine($"Key: {cookie.Key} / Value {cookie.Value}");
+            //}
+
+            //Console.WriteLine($"========================================================");
+            var response = await _demoNoCookie.send();
+
+            //var requestHeaders = new Dictionary<string, string> { { "X-Tenant-Id", Guid.NewGuid().ToString() } };
+            //var response = await _demoNoCookie.send2(requestHeaders);
+            var headers = response.Headers;
+
+            Console.WriteLine($"========================================================");
+
+            foreach (var header in headers)
+            {
+                Console.WriteLine($"Key: {header.Key}");
+                if (header.Key == "Set-Cookie")
+                {
+                    foreach (var value in header.Value)
+                    {
+                        Console.WriteLine($"Value {value}");
+                    }
+                }
+            }
+
+            Console.WriteLine($"========================================================");
+
+            return response.Content.ToString();
         }
 
         [HttpGet("discovery")]
@@ -244,11 +318,11 @@ namespace RefitLab.Controllers
 
             if (response.IsError)
             {
-              Console.WriteLine (response.Error);
-              return;
+                Console.WriteLine(response.Error);
+                return;
             }
 
-            Console.WriteLine (response.Raw);
+            Console.WriteLine(response.Raw);
         }
 
         [HttpGet("weather")]
@@ -324,6 +398,15 @@ namespace RefitLab.Controllers
             return Ok(response);
         }
 
+    }
+
+    public interface IDemoNoCookie
+    {
+        [Get("/weatherforecast")]
+        Task<HttpResponseMessage> send();
+
+        [Get("/weatherforecast")]
+        Task<HttpResponseMessage> send2([HeaderCollection] IDictionary<string, string> headers);
     }
 
     public interface IpobxApi
